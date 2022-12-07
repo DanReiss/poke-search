@@ -1,0 +1,1 @@
+Pokedex do Anime Pokemon com mecanismos de busca, por id e por nome, e dados sobre os pokemons usando a API PokeAPI, HTML, CSS e Javascript.
