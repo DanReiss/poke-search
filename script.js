@@ -1,29 +1,33 @@
-// document.addEventListener("DOMContentLoaded", fetchPokemons)
 
-let pokeContainer = document.querySelector(".pokemons-container")
-
-
-    // if(i % 4 === 1){
-    //     innerRow += `<div class="row row${row}">`
-    // }
-    // innerRow += `<div class="col card m-2">
-    //                 <h4>${pokemon.name}</h4>
-    //                 <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
-    //                 <p>${format(pokemon.id)}</p>
-    //             </div>`;
-    // if(i % 4 === 0){
-    //     innerRow += "</div>"
-    // }    
-    
+const pokeContainer = document.querySelector(".pokemons-container");
+const searchBtn = document.querySelector("#search-button")
+const searchInput = document.querySelector("#search-input");
+const pagesBox = document.getElementById("pages");
+const previous = document.getElementById("previous");
+const next = document.getElementById("next");
+const pageNum = document.getElementById("page-number");
+let currentIDs = [];
 
 
-const fetchPokemons = () =>{
+
+previous.addEventListener("click", changePage)
+next.addEventListener("click", changePage)
+searchBtn.addEventListener("click", search)
+
+const fetchPokemons = (ids) =>{
     const getURL = id => `https://pokeapi.co/api/v2/pokemon/${id}`
 
     const pokemonPromises = [];
 
-    for(let i =1; i<= 20; i++){
-        pokemonPromises.push(fetch(getURL(i)).then(response => response.json()))
+    if(ids){
+        for(let i = ids[0]; i <= ids[1]; i++){
+            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()))
+        }
+    }else{
+        for(let i = 1; i<= 20; i++){
+            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()))
+        }
+        currentIDs = [1, 20]
     }
 
     Promise.all(pokemonPromises)
@@ -61,3 +65,45 @@ function format(id){
     if(id > 100) return "Nº" + id;
 }
 
+function changePage(e){
+    if(e.target.id === "next"){
+        currentIDs = [currentIDs[0] + 20, currentIDs[1] + 20]
+        fetchPokemons(currentIDs)
+        pageNum.innerHTML = Number(pageNum.innerHTML) + 1
+    }else if(e.target.id === "previous"){
+        if(currentIDs[0]){
+            currentIDs = [currentIDs[0] - 20, currentIDs[1] - 20]
+            fetchPokemons(currentIDs)
+            pageNum.innerHTML = Number(pageNum.innerHTML) - 1
+        }
+    } 
+}
+
+
+function search(){
+    if(!searchInput.value) alert("Type an ID or a Name!")
+    else{
+        const url = 'https://pokeapi.co/api/v2/pokemon/' + searchInput.value.toLowerCase();
+        fetch(url).then(res => res.json())
+        .catch((err)=>{
+            if(err) alert("No valid value, please write correctly")
+        })
+        .then(pokemon =>{
+           const innerRows = `<div class="row row1">
+                    <div class="col card m-2">
+                        <h4>${pokemon.name}</h4>
+                        <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
+                        <p>${format(pokemon.id)}</p>
+                    </div>
+                    <div class="col m-2"></div>
+                    <div class="col m-2"></div>
+                    <div class="col m-2"></div>
+             </div>`;
+
+            searchInput.value = "";
+            pagesBox.classList.remove("d-flex");
+            pagesBox.classList.add("d-none");
+            pokeContainer.innerHTML = innerRows
+        })
+    }   
+}
