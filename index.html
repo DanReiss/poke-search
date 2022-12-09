@@ -10,11 +10,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body>
-    <div class="main">
+    <div id="main">
         <div class="d-flex justify-content-center">
             <img class="m-auto logo-pokemon" src="./styles/assets/pokemon-svgrepo-com.svg" alt="Logo Pokemon">
         </div>
-        <div class="search container">
+        <div class="search container mb-5">
             <div class="input-group my-3">
                 <input type="text" class="form-control" placeholder="Name or ID" aria-label="Pokemon name or ID" aria-describedby="button-addon2">
                 <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
@@ -27,9 +27,14 @@
               </div>
               <div class="row row3">
               </div>
-              <div class="row row4">
-              </div>
         </div>
+    </div>
+    <div id="pages" class="d-flex justify-content-center m-4">
+        <span>
+            <svg id="previous" class="mx-4" width="12" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M11 1 3 9l8 8" stroke="#1D2026" stroke-width="3" fill="none" fill-rule="evenodd"/></svg>
+            <svg id="next" class="mx-4" width="13" height="18" xmlns="http://www.w3.org/2000/svg"><path d="m2 1 8 8-8 8" stroke="#1D2026" stroke-width="3" fill="none" fill-rule="evenodd"/></svg>
+        </span>
+        <span class="number"></span>
     </div>
     <script src="./script.js"></script>
 </body>
