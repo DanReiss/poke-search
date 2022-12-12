@@ -1,3 +1,8 @@
 .logo-pokemon{
     width: 125px;
 }
+
+.id-pokemon{
+    font-size: 17px;
+    letter-spacing: 3px;
+}

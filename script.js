@@ -1,3 +1,4 @@
+"use strict" 
 
 const pokeContainer = document.querySelector(".pokemons-container");
 const searchBtn = document.querySelector("#search-button")
@@ -6,9 +7,8 @@ const pagesBox = document.getElementById("pages");
 const previous = document.getElementById("previous");
 const next = document.getElementById("next");
 const pageNum = document.getElementById("page-number");
+const backBtn = document.querySelector(".go-back");
 let currentIDs = [];
-
-
 
 previous.addEventListener("click", changePage)
 next.addEventListener("click", changePage)
@@ -16,7 +16,6 @@ searchBtn.addEventListener("click", search)
 
 const fetchPokemons = (ids) =>{
     const getURL = id => `https://pokeapi.co/api/v2/pokemon/${id}`
-
     const pokemonPromises = [];
 
     if(ids){
@@ -29,7 +28,6 @@ const fetchPokemons = (ids) =>{
         }
         currentIDs = [1, 20]
     }
-
     Promise.all(pokemonPromises)
     .then(pokemonsData =>{
         loadPokemons(pokemonsData)
@@ -37,18 +35,20 @@ const fetchPokemons = (ids) =>{
 }
 
 fetchPokemons();
+backBtn.addEventListener("click", ()=>{fetchPokemons(currentIDs)})
 
 
 function loadPokemons(pokemons){
     const innerRows = pokemons.reduce((acc, pokemon, index) => {
         let row = 1;
+        const pokemonName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
         if((index + 1) % 4 === 1){
             acc += `<div class="row row${row}">`
         }
-        acc += `<div class="col card m-2">
-                        <h4>${pokemon.name}</h4>
+        acc += `<div class="col card m-4">
+                        <h4 class="text-primary pt-3">${pokemonName}</h4>
                         <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
-                        <p>${format(pokemon.id)}</p>
+                        <p class="text-secondary id-pokemon">${format(pokemon.id)}</p>
                     </div>`;
         if((index + 1) % 4 === 0){
             acc += "</div>"
@@ -56,6 +56,12 @@ function loadPokemons(pokemons){
         } 
         return acc
     }, "");
+
+    pokeContainer.innerHTML = innerRows;
+    backBtn.classList.remove("d-flex")
+    backBtn.classList.add("d-none")
+    pagesBox.classList.remove("d-none");
+    pagesBox.classList.add("d-flex");
     pokeContainer.innerHTML = innerRows;
 }
 
@@ -89,11 +95,12 @@ function search(){
             if(err) alert("No valid value, please write correctly")
         })
         .then(pokemon =>{
-           const innerRows = `<div class="row row1">
-                    <div class="col card m-2">
-                        <h4>${pokemon.name}</h4>
+            const pokemonName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
+            const innerRows = `<div class="row row1">
+                    <div class="col card m-4">
+                        <h4 class="text-primary pt-3">${pokemonName}</h4>
                         <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
-                        <p>${format(pokemon.id)}</p>
+                        <p class="text-secondary id-pokemon">${format(pokemon.id)}</p>
                     </div>
                     <div class="col m-2"></div>
                     <div class="col m-2"></div>
@@ -101,9 +108,11 @@ function search(){
              </div>`;
 
             searchInput.value = "";
+            backBtn.classList.remove("d-none")
+            backBtn.classList.add("d-flex")
             pagesBox.classList.remove("d-flex");
             pagesBox.classList.add("d-none");
-            pokeContainer.innerHTML = innerRows
+            pokeContainer.innerHTML = innerRows;
         })
     }   
 }
