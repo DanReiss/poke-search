@@ -32,6 +32,9 @@ const fetchPokemons = (ids) =>{
     .then(pokemonsData =>{
         loadPokemons(pokemonsData)
     })
+    .catch(err =>{
+        if(err) alert(err)
+    })
 }
 
 fetchPokemons();
@@ -45,7 +48,7 @@ function loadPokemons(pokemons){
         if((index + 1) % 4 === 1){
             acc += `<div class="row row${row}">`
         }
-        acc += `<div class="col card m-4">
+        acc += `<div class="col card m-4 pokemon">
                         <h4 class="text-primary pt-3">${pokemonName}</h4>
                         <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
                         <p class="text-secondary id-pokemon">${format(pokemon.id)}</p>
@@ -63,6 +66,8 @@ function loadPokemons(pokemons){
     pagesBox.classList.remove("d-none");
     pagesBox.classList.add("d-flex");
     pokeContainer.innerHTML = innerRows;
+
+    addEventPokemons();
 }
 
 function format(id){
@@ -97,7 +102,7 @@ function search(){
         .then(pokemon =>{
             const pokemonName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
             const innerRows = `<div class="row row1">
-                    <div class="col card m-4">
+                    <div class="col card m-4 pokemon">
                         <h4 class="text-primary pt-3">${pokemonName}</h4>
                         <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
                         <p class="text-secondary id-pokemon">${format(pokemon.id)}</p>
@@ -114,5 +119,29 @@ function search(){
             pagesBox.classList.add("d-none");
             pokeContainer.innerHTML = innerRows;
         })
+        addEventPokemons();
     }   
+}
+
+
+function addEventPokemons(){
+    setTimeout(() =>{
+        const pokemonsDivs = document.querySelectorAll(".pokemon") 
+        pokemonsDivs.forEach((pokemonDiv)=>{
+            pokemonDiv.addEventListener("click", loadPokemonPage)
+        })
+    },1000) 
+}
+
+function loadPokemonPage(e){
+    const name = e.path[1].children[0].innerText.toLowerCase();
+    const url =  'https://pokeapi.co/api/v2/pokemon/' + name;
+    fetch(url).then(res => res.json())
+    .catch(err =>{
+        if(err) alert(err)
+    })
+    .then((pokemon)=>{
+        console.log(pokemon)
+    })
+    
 }
