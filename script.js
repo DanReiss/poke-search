@@ -1,45 +1,68 @@
-"use strict" 
+"use strict"
 
 const pokeContainer = document.querySelector(".pokemons-container");
-const searchBtn = document.querySelector("#search-button")
+const searchBtn = document.querySelector("#search-button");
 const searchInput = document.querySelector("#search-input");
 const pagesBox = document.getElementById("pages");
+
 const previous = document.getElementById("previous");
 const next = document.getElementById("next");
 const pageNum = document.getElementById("page-number");
+
 const backBtn = document.querySelector(".go-back");
+
 let currentIDs = [];
 
-previous.addEventListener("click", changePage)
-next.addEventListener("click", changePage)
-searchBtn.addEventListener("click", search)
+const modalPokemon = document.querySelector("#single-poke-modal")
+const closeButton = document.querySelector(".close-page")
+const infoPokeName = document.querySelector(".info-poke-name");
+const infoPokeId = document.querySelector(".info-id");
+const infoImage = document.querySelector(".info-img");
+const divInfos = document.querySelector(".infos");
+const infoType = document.querySelector(".type");
+const infoWeaknesses = document.querySelector(".weaknesses");
+
+
+
+
+closeButton.addEventListener("click", ()=>{
+    if(modalPokemon.classList.contains("d-flex")) {
+        modalPokemon.classList.remove("d-flex")
+        modalPokemon.classList.add("d-none");
+    }
+})
+
+previous.addEventListener("click", changePage);
+next.addEventListener("click", changePage);
+
+searchBtn.addEventListener("click", search);
 
 const fetchPokemons = (ids) =>{
-    const getURL = id => `https://pokeapi.co/api/v2/pokemon/${id}`
+    const getURL = id => `https://pokeapi.co/api/v2/pokemon/${id}`;
     const pokemonPromises = [];
 
     if(ids){
         for(let i = ids[0]; i <= ids[1]; i++){
-            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()))
+            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()));
         }
     }else{
         for(let i = 1; i<= 20; i++){
-            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()))
+            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()));
         }
-        currentIDs = [1, 20]
+        currentIDs = [1, 20];
     }
     Promise.all(pokemonPromises)
     .then(pokemonsData =>{
-        loadPokemons(pokemonsData)
+        loadPokemons(pokemonsData);
     })
     .catch(err =>{
-        if(err) alert(err)
+        if(err) alert(err);
     })
 }
 
 fetchPokemons();
-backBtn.addEventListener("click", ()=>{fetchPokemons(currentIDs)})
 
+backBtn.addEventListener("click", ()=>{fetchPokemons(currentIDs)});
 
 function loadPokemons(pokemons){
     const innerRows = pokemons.reduce((acc, pokemon, index) => {
@@ -142,6 +165,35 @@ function loadPokemonPage(e){
     })
     .then((pokemon)=>{
         console.log(pokemon)
+        const pokeName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
+        modalPokemon.classList.remove("d-none")
+        modalPokemon.classList.add("d-flex")
+        infoPokeId.innerText = format(pokemon.id)
+        infoPokeName.innerText = pokeName
+        infoImage.setAttribute("src", pokemon.sprites.other['official-artwork']['front_default'])
+    
     })
+
+    fetch("https://pokeapi.co/api/v2/pokemon-form/1/")
+    .then(res => res.json()
+    .then(poke => console.log(poke)))
+
+
+    fetch("https://pokeapi.co/api/v2/version-group/1/")
+    .then(res => res.json()
+    .then(poke => console.log(poke)))
+    
+
+    fetch("https://pokeapi.co/api/v2/pokemon-species/2/")
+    .then(res => res.json()
+    .then(poke => console.log(poke)))
+
+    
+
+
+    fetch("https://pokeapi.co/api/v2/evolution-chain/1/")
+    .then(res => res.json()
+    .then(poke => console.log(poke)))
+
     
 }

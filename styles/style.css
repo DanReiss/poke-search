@@ -2,7 +2,7 @@
     width: 125px;
 }
 
-.id-pokemon{
+.id-pokemon, .info-id{
     font-size: 17px;
     letter-spacing: 3px;
 }
@@ -20,6 +20,28 @@
 
 .pokemon:active{
     transform: scale(0.975);
+}
+
+#single-poke-modal{
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    right: 0;
+    z-index: 15;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#pokemon-infos{
+    width: calc(400px + 10%);
+    height: 80vh;
+    z-index: 5;
+}
+
+.info-img{
+    width: 400px;
 }
 
 
