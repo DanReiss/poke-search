@@ -21,7 +21,7 @@ const infoImage = document.querySelector(".info-img");
 const divInfos = document.querySelector(".infos");
 const infoType = document.querySelector(".type");
 const infoWeaknesses = document.querySelector(".weaknesses");
-
+let info = num => document.querySelector(`.info${num}`)
 
 
 
@@ -166,34 +166,34 @@ function loadPokemonPage(e){
     .then((pokemon)=>{
         console.log(pokemon)
         const pokeName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
-        modalPokemon.classList.remove("d-none")
-        modalPokemon.classList.add("d-flex")
         infoPokeId.innerText = format(pokemon.id)
         infoPokeName.innerText = pokeName
         infoImage.setAttribute("src", pokemon.sprites.other['official-artwork']['front_default'])
+
+        info(1).innerText = Number(pokemon.height / 10).toFixed(1) + " m";
+        info(2).innerText = Number(pokemon.weight / 10).toFixed(1) + " kg";
+
+
+        let abilities = pokemon.abilities.reduce((acc, item)=>{
+            return acc + `<span>${item.ability.name}</span>`
+        }, "")
+        info(4).innerHTML = abilities;
+
+
+        let types = pokemon.types.reduce((acc, item) =>{
+            return acc + `<h5>${item.type.name}</h5>`
+         }, "<h5 class='bg-info'>Type</h5>")
+        infoType.innerHTML = types;
+        
     
+
+        modalPokemon.classList.remove("d-none")
+        modalPokemon.classList.add("d-flex")
     })
-
-    fetch("https://pokeapi.co/api/v2/pokemon-form/1/")
-    .then(res => res.json()
-    .then(poke => console.log(poke)))
-
 
     fetch("https://pokeapi.co/api/v2/version-group/1/")
     .then(res => res.json()
-    .then(poke => console.log(poke)))
-    
-
-    fetch("https://pokeapi.co/api/v2/pokemon-species/2/")
-    .then(res => res.json()
-    .then(poke => console.log(poke)))
-
-    
-
-
-    fetch("https://pokeapi.co/api/v2/evolution-chain/1/")
-    .then(res => res.json()
-    .then(poke => console.log(poke)))
-
-    
+    .then(pokemon => {
+        info(3).innerText = pokemon.regions[0].name
+    }))
 }
