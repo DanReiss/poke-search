@@ -1,5 +1,7 @@
 "use strict"
 
+
+
 const pokeContainer = document.querySelector(".pokemons-container");
 const searchBtn = document.querySelector("#search-button");
 const searchInput = document.querySelector("#search-input");
@@ -41,16 +43,15 @@ const fetchPokemons = (ids) =>{
     const getURL = id => `https://pokeapi.co/api/v2/pokemon/${id}`;
     const pokemonPromises = [];
 
-    if(ids){
-        for(let i = ids[0]; i <= ids[1]; i++){
-            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()));
-        }
-    }else{
-        for(let i = 1; i<= 20; i++){
-            pokemonPromises.push(fetch(getURL(i)).then(response => response.json()));
-        }
-        currentIDs = [1, 20];
+    let [i, numLastPokemonId] = ids? ids : [1, 20]
+
+    if(!ids) currentIDs = [1, 20];
+
+
+    for(i; i <= numLastPokemonId; i++){
+        pokemonPromises.push(fetch(getURL(i)).then(response => response.json()));
     }
+
     Promise.all(pokemonPromises)
     .then(pokemonsData =>{
         loadPokemons(pokemonsData);
@@ -67,13 +68,13 @@ backBtn.addEventListener("click", ()=>{fetchPokemons(currentIDs)});
 function loadPokemons(pokemons){
     const innerRows = pokemons.reduce((acc, pokemon, index) => {
         let row = 1;
-        const pokemonName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
+        const pokemonName = firstLetterUpper(pokemon.name)
         if((index + 1) % 4 === 1){
             acc += `<div class="row row${row}">`
         }
-        acc += `<div class="col card m-4 pokemon">
+        acc += `<div class="col-md col-sm-6 col-12 card m-0 m-lg-4 pokemon">
                         <h4 class="text-primary pt-3">${pokemonName}</h4>
-                        <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
+                        <img class="pokemon-image" src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
                         <p class="text-secondary id-pokemon">${format(pokemon.id)}</p>
                     </div>`;
         if((index + 1) % 4 === 0){
@@ -97,6 +98,10 @@ function format(id){
     if(id < 10) return "Nº00" + id;
     if(id < 100 && id >= 10) return "Nº0" + id;
     if(id > 100) return "Nº" + id;
+}
+
+function firstLetterUpper(str){
+    return str[0].toUpperCase() + str.slice(1, str.length)
 }
 
 function changePage(e){
@@ -123,9 +128,9 @@ function search(){
             if(err) alert("No valid value, please write correctly")
         })
         .then(pokemon =>{
-            const pokemonName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
+            const pokemonName = firstLetterUpper(pokemon.name)
             const innerRows = `<div class="row row1">
-                    <div class="col card m-4 pokemon">
+                    <div class="col-md col-sm-6 col-12 card m-0 m-lg-4 pokemon">
                         <h4 class="text-primary pt-3">${pokemonName}</h4>
                         <img src="${pokemon.sprites['front_default']}" alt="image ${pokemon.name}">
                         <p class="text-secondary id-pokemon">${format(pokemon.id)}</p>
@@ -164,8 +169,7 @@ function loadPokemonPage(e){
         if(err) alert(err)
     })
     .then((pokemon)=>{
-        console.log(pokemon)
-        const pokeName = pokemon.name[0].toUpperCase() + pokemon.name.slice(1, pokemon.name.length)
+        const pokeName = firstLetterUpper(pokemon.name)
         infoPokeId.innerText = format(pokemon.id)
         infoPokeName.innerText = pokeName
         infoImage.setAttribute("src", pokemon.sprites.other['official-artwork']['front_default'])
@@ -175,25 +179,29 @@ function loadPokemonPage(e){
 
 
         let abilities = pokemon.abilities.reduce((acc, item)=>{
-            return acc + `<span>${item.ability.name}</span>`
+            return acc + `<span class="d-block">${firstLetterUpper(item.ability.name)}</span>`
         }, "")
         info(4).innerHTML = abilities;
 
 
         let types = pokemon.types.reduce((acc, item) =>{
-            return acc + `<h5>${item.type.name}</h5>`
-         }, "<h5 class='bg-info'>Type</h5>")
-        infoType.innerHTML = types;
-        
-    
+            // const typeBackgroundColor = typePokemonColors(item.type.name)
 
-        modalPokemon.classList.remove("d-none")
-        modalPokemon.classList.add("d-flex")
+            return acc + `<span class="d-block">${firstLetterUpper(item.type.name)}</h5>`
+         }, "")
+        info(5).innerHTML = types;
+        
     })
 
     fetch("https://pokeapi.co/api/v2/version-group/1/")
-    .then(res => res.json()
+    .then(res => res.json())
     .then(pokemon => {
-        info(3).innerText = pokemon.regions[0].name
-    }))
+        info(3).innerText = firstLetterUpper(pokemon.regions[0].name)
+
+        setTimeout(()=>{
+            modalPokemon.classList.remove("d-none")
+            modalPokemon.classList.add("d-flex")
+        },300)
+        
+    })
 }

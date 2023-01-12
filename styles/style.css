@@ -34,14 +34,31 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+
 #pokemon-infos{
     width: calc(400px + 10%);
-    height: 80vh;
+    height: 85vh;
     z-index: 5;
 }
 
 .info-img{
     width: 400px;
+}
+
+@media (max-width: 558px) {
+    .pokemon-image{
+        margin: auto;
+        width: 75%;
+    }     
+}
+
+@media (max-width: 450px) {
+    
+    #pokemon-infos{
+        width: 100vw;
+        height: 100%;
+        z-index: 5;
+    }     
 }
 
 
