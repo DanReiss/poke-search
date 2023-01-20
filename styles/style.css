@@ -36,17 +36,14 @@
 
 
 #pokemon-infos{
-    width: calc(400px + 10%);
+    width: 30rem;
     height: 85vh;
     z-index: 5;
 }
 
 .info-img{
-    width: 400px;
+    width: 20rem;
 }
-
-
-
 
 @media (max-width: 558px) {
     .pokemon-image{
@@ -61,6 +58,7 @@
     } 
     #pokemon-infos{
         width: 90vw;
+        height: 40rem;
     }     
 }
 
