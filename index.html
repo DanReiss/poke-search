@@ -1,85 +1,82 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeSearch</title>
-    <link rel="icon" href="./styles/assets/pokeball-pokemon-svgrepo-com.svg">
-    <link rel="stylesheet" href="./styles/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PokeSearch</title>
+  <link rel="icon" href="./styles/assets/pokeball-pokemon-svgrepo-com.svg">
+  <link rel="stylesheet" href="./styles/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body>
-    <div id="main">
-        <div class="d-flex justify-content-center">
-            <img class="m-auto logo-pokemon" src="./styles/assets/pokemon-svgrepo-com.svg" alt="Logo Pokemon">
-        </div>
-        <div class="search container mb-5">
-            <div class="input-group my-3">
-                <input id="search-input" type="text" class="form-control" placeholder="Name or ID" aria-label="Pokemon name or ID" aria-describedby="button-addon2">
-                <button id="search-button" class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
-              </div>
-        </div>
-        <div class="pokemons-container container text-center d-grid">
-            
-        </div>
+    <header class="d-flex justify-content-center">
+      <img class="m-auto logo-pokemon" src="./styles/assets/pokemon-svgrepo-com.svg" alt="Logo Pokemon">
+    </header>
+    <div class="search container mb-5">
+      <form id="search-form" class="input-group my-3">
+        <input id="search-input" type="text" class="form-control" placeholder="Name or ID" aria-label="Pokemon name or ID">
+        <button id="search-button" class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+      </form>
     </div>
-    <div id="single-poke-modal" class="d-none flex-row flex-wrap">
+    <div class="pokemons-container container text-center d-grid">
+            
+    </div>
+    <main>
+      <div id="single-poke-modal" class="d-none flex-row flex-wrap">
         <div id="pokemon-infos" class="container d-flex flex-column align-items-center bg-light rounded border">
-            <button class="close-page bg-light align-self-end p-1 pt-3 border-0">
-                <img src="./styles/assets/close-icon.svg" alt="close-button">
-            </button>
-                <h4 class="info-poke-name text-primary p-0 m-0"></h4>
-                <span class="info-id text-secondary"></span>
-            <img class="info-img" alt="pokemon image">
-            
-            <div class="container infos">
-                <div class="row d-flex flex-row justify-content-evenly">
-                  <div class="col-6 col-sm-3 div-info">
-                        <h5 class="text-info">Height</h5>
-                        <span class="info1"></span>
-                  </div>
-                    <div class="col-6 col-sm-3 div-info">
-                        <h5 class="text-info">Weight</h5>
-                        <span class="info2"></span>
-                    </div>
-                </div>
-                <div class="row d-flex flex-row justify-content-evenly">
-                    <div class="col-6 col-sm-3 div-info">
-                        <h5 class="text-info">Region</h5>
-                        <span class="info3"></span>
-                    </div>
-                    <div class="col-6 col-sm-3 div-info">
-                        <h5 class="text-info">Abilities</h5>
-                        <div class="info4"></div>
-                    </div>
-                </div>
-                <div class="row d-flex flex-row justify-content-evenly">
-                    <div class="col-6 col-sm-3 div-info">
-                        <h5 class="text-info">Type</h5>
-                        <div class="info5"></div>
-                    </div>
-                    <div class="col-6 col-sm-3">
-
-                    </div>
-                </div>
+          <button class="close-page bg-light align-self-end p-1 pt-3 border-0">
+            <img src="./styles/assets/close-icon.svg" alt="close-button">
+          </button>
+          <h4 class="info-poke-name text-primary p-0 m-0"></h4>
+          <span class="info-id text-secondary"></span>
+          <img class="info-img" alt="pokemon image">
+          <div class="container infos">
+            <div class="row d-flex flex-row justify-content-evenly">
+              <div class="col-6 col-sm-3 div-info">
+                <h5 class="text-info">Height</h5>
+                <span class="info1"></span>
+              </div>
+              <div class="col-6 col-sm-3 div-info">
+                <h5 class="text-info">Weight</h5>
+                <span class="info2"></span>
+              </div>
             </div>
+            <div class="row d-flex flex-row justify-content-evenly">
+              <div class="col-6 col-sm-3 div-info">
+                <h5 class="text-info">Region</h5>
+                <span class="info3"></span>
+              </div>
+              <div class="col-6 col-sm-3 div-info">
+                <h5 class="text-info">Abilities</h5>
+                <div class="info4"></div>
+              </div>
+            </div>
+            <div class="row d-flex flex-row justify-content-evenly">
+              <div class="col-6 col-sm-3 div-info">
+                <h5 class="text-info">Type</h5>
+                <div class="info5"></div>
+              </div>
+                  <div class="col-6 col-sm-3"></div>
+            </div>
+          </div>
         </div>
-    </div>
-    
-
-    <div id="pages" class="d-none flex-row justify-content-center align-items-center m-4 mb-5">
-            <button class="border-0 bg-white align-middle">
-                <img id="previous" class="px-3"src="./styles/assets/icon-previous.svg" alt="">
-            </button>
-            <h4 id="page-number" class="m-0 p-0">1</h4>
-            <button class="border-0 bg-white align-middle">
-                <img id="next" class="px-3" src="./styles/assets/icon-next.svg"  alt="">
-            </button>
-    </div>
-    <div class="go-back d-none mt-5 justify-content-center">
-        <button class="go-back btn btn-outline-primary">Go back!</button>
-    </div>
-    <script src="./script.js"></script>
+      </div>
+      
+      <div id="pages" class="d-none flex-row justify-content-center align-items-center m-4 mb-5">
+              <button class="border-0 bg-white align-middle">
+                  <img id="previous" class="px-3"src="./styles/assets/icon-previous.svg" alt="">
+              </button>
+              <h4 id="page-number" class="m-0 p-0">1</h4>
+              <button class="border-0 bg-white align-middle">
+                  <img id="next" class="px-3" src="./styles/assets/icon-next.svg"  alt="">
+              </button>
+      </div>
+      <div class="go-back d-none mt-5 justify-content-center">
+          <button class="go-back btn btn-outline-primary">Go back!</button>
+      </div>
+    </main>
+  
+  <script src="./script.js"></script>
 </body>
 </html>
