@@ -30,9 +30,11 @@ const pokemonBox = (pokeData) =>{
     `<div id="${pokeData.name}" class="col-md col-sm-6 col-12 card m-0 m-lg-4 pokemon">
         <h4 class="text-primary pt-3">${pokemonName}</h4>
         <img src="${pokeData.sprites['front_default']}" alt="image ${pokeData.name}">
-        <p class="text-secondary id-pokemon">${format(pokeData.id)}</p>
+        <span class="text-secondary fs-5">${format(pokeData.id)}</span>
     </div>`)
 }
+
+console.log()
 
 closeButton.addEventListener("click", (e)=>{ closeModal(e, true)})
 modalPokemon.addEventListener("click", closeModal)
@@ -51,9 +53,8 @@ searchForm.addEventListener("submit", (e)=>{
 
 function closeModal(e, inCloseBtn){
   if(e.target.id === "single-poke-modal" || inCloseBtn){
-    if(modalPokemon.classList.contains("d-flex")) {
-    
-      modalPokemon.classList.remove("d-flex")
+    if(modalPokemon.classList.contains("d-grid")) {    
+      modalPokemon.classList.remove("d-grid")
       modalPokemon.classList.add("d-none");
     } 
   }
@@ -119,7 +120,7 @@ function format(id){
 }
 
 function firstLetterUpper(str){
-  return str[0].toUpperCase() + str.slice(1, str.length)
+  return str.charAt().toUpperCase() + str.slice(1)
 }
 
 function changePage(e){
@@ -216,5 +217,5 @@ async function loadPokemonPage(e){
   })
 
   modalPokemon.classList.remove("d-none")
-  modalPokemon.classList.add("d-flex")
+  modalPokemon.classList.add("d-grid")
 }

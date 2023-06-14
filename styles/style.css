@@ -1,16 +1,16 @@
-.logo-pokemon{
-    width: 125px;
+@keyframes opacity{
+    0%{opacity: 0;}
+    100%{opacity: 1;}
 }
 
-.id-pokemon, .info-id{
-    font-size: 17px;
-    letter-spacing: 3px;
+.logo-pokemon{
+    width: 125px;
 }
 
 .pokemon{
     cursor: pointer;
     opacity: 1;
-    transition: all 0.5s;
+    transition: all 0.3s;
     animation: opacity 1s;
 }
 
@@ -24,21 +24,18 @@
 
 #single-poke-modal{
     position: fixed;
-    align-items: center;
-    justify-content: center;
-    top: 0;
-    right: 0;
-    z-index: 15;
+    inset: 0;
+    display: none;
+    place-items: center;
+    z-index: 2;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.75);
 }
 
-
-#pokemon-infos{
-    width: 30rem;
-    height: 85vh;
-    z-index: 5;
+#single-poke-modal > div{
+    width: fit-content;
+    height: fit-content;
 }
 
 .info-img{
@@ -53,17 +50,7 @@
 }
 
 @media (max-width: 450px) {
-    .info-img{
-        width: 75%;
+    #single-poke-modal > div{
+       width: 90vw;
     } 
-    #pokemon-infos{
-        width: 90vw;
-        height: 40rem;
-    }     
-}
-
-
-@keyframes opacity{
-    0%{opacity: 0;}
-    100%{opacity: 1;}
 }
