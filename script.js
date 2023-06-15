@@ -8,20 +8,16 @@ const pagesBox = document.getElementById("pages");
 const previous = document.getElementById("previous");
 const next = document.getElementById("next");
 const pageNum = document.getElementById("page-number");
-
 const backBtn = document.querySelector(".go-back");
-
-let currentIDs = [];
 
 const modalPokemon = document.querySelector("#single-poke-modal")
 const closeButton = document.querySelector(".close-page")
+
 const infoPokeName = document.querySelector(".info-poke-name");
 const infoPokeId = document.querySelector(".info-id");
 const infoImage = document.querySelector(".info-img");
-const divInfos = document.querySelector(".infos");
-const infoType = document.querySelector(".type");
-const infoWeaknesses = document.querySelector(".weaknesses");
 let info = num => document.querySelector(`.info${num}`)
+let currentIDs = [1, 20];
 
 const pokemonBox = (pokeData) =>{
   const pokemonName = firstLetterUpper(pokeData.name)
@@ -34,14 +30,11 @@ const pokemonBox = (pokeData) =>{
     </div>`)
 }
 
-console.log()
-
+window.addEventListener("load", ()=> fetchPokemons(currentIDs))
 closeButton.addEventListener("click", (e)=>{ closeModal(e, true)})
 modalPokemon.addEventListener("click", closeModal)
-
 previous.addEventListener("click", changePage);
 next.addEventListener("click", changePage);
-
 backBtn.addEventListener("click", ()=>{fetchPokemons(currentIDs)});
 
 searchForm.addEventListener("submit", (e)=>{
@@ -53,25 +46,24 @@ searchForm.addEventListener("submit", (e)=>{
 
 function closeModal(e, inCloseBtn){
   if(e.target.id === "single-poke-modal" || inCloseBtn){
-    if(modalPokemon.classList.contains("d-grid")) {    
-      modalPokemon.classList.remove("d-grid")
-      modalPokemon.classList.add("d-none");
-    } 
+    modalPokemon.classList.replace("d-grid", "d-none")
   }
   return;
 }
 
+async function fetchData(data){
+  const res = await fetch(data);
+  const convertedData = await res.json();
+  return convertedData;
+}
 
 function fetchPokemons(ids){
   const getURL = id => `https://pokeapi.co/api/v2/pokemon/${id}`;
   const pokemonPromises = [];
-
-  let [i, numLastPokemonId] = ids? ids : [1, 20] 
-
-  if(!ids) currentIDs = [1, 20];
+  let [i, numLastPokemonId] = ids;
 
   for(i; i <= numLastPokemonId; i++){
-    pokemonPromises.push(fetch(getURL(i)).then(response => response.json()));
+    pokemonPromises.push(fetchData(getURL(i)));
   }
 
   Promise.all(pokemonPromises)
@@ -82,8 +74,6 @@ function fetchPokemons(ids){
     alert(err);
   })
 }
-
-fetchPokemons();
 
 function loadPokemons(pokemons){
   const innerRows = pokemons.reduce((acc, pokemon, index) => {
@@ -99,15 +89,11 @@ function loadPokemons(pokemons){
             row++
     } 
 
-    return acc
+    return acc;
   }, "");
-
   
-  pokeContainer.innerHTML = innerRows;
-  backBtn.classList.remove("d-flex")
-  backBtn.classList.add("d-none")
-  pagesBox.classList.remove("d-none");
-  pagesBox.classList.add("d-flex");
+  backBtn.classList.replace("d-flex", "d-none");
+  pagesBox.classList.replace("d-none", "d-flex");
   pokeContainer.innerHTML = innerRows;
 
   addEventPokemons();
@@ -120,102 +106,72 @@ function format(id){
 }
 
 function firstLetterUpper(str){
-  return str.charAt().toUpperCase() + str.slice(1)
+  return str.charAt().toUpperCase() + str.slice(1);
 }
 
 function changePage(e){
   if(e.target.id === "next"){
-    currentIDs = [currentIDs[0] + 20, currentIDs[1] + 20]
-    fetchPokemons(currentIDs)
-    pageNum.innerHTML = Number(pageNum.innerHTML) + 1
-  }else if(e.target.id === "previous"){
-    if(currentIDs[0]){
-      currentIDs = [currentIDs[0] - 20, currentIDs[1] - 20]
-      fetchPokemons(currentIDs)
-      pageNum.innerHTML = Number(pageNum.innerHTML) - 1
+    currentIDs = currentIDs.map(id => id + 20);
+    fetchPokemons(currentIDs);
+    pageNum.innerHTML = Number(pageNum.innerHTML) + 1;
+  }
+  if(e.target.id === "previous"){
+    if(currentIDs[0] !== 1){
+      currentIDs = currentIDs.map(id => id - 20);
+      fetchPokemons(currentIDs);
+      pageNum.innerHTML = Number(pageNum.innerHTML) - 1;
     }
   } 
 }
 
-
 async function search(value){
 
   const url = `https://pokeapi.co/api/v2/pokemon/${value.toLowerCase()}`;
-  await fetch(url)
-  .then(res => res.json())
-  .then(pokemon =>{      
+  const pokemonData = await fetchData(url);
     
-    const innerRows = 
-    `<div class="row row1">
-       ${pokemonBox(pokemon)}
+  const innerRows = `
+  <div class="row row1">
+      ${pokemonBox(pokemonData)}
         <div class="col m-2"></div>
         <div class="col m-2"></div>
         <div class="col m-2"></div>
-     </div>`;
-    pokeContainer.innerHTML = innerRows;
-  })
-  .catch(()=>{
-    alert("Not Found, please write a valid value")
-  })
+  </div>`;
 
+  pokeContainer.innerHTML = innerRows;
   searchInput.value = "";
-  backBtn.classList.remove("d-none")
-  backBtn.classList.add("d-flex")
-  pagesBox.classList.remove("d-flex");
-  pagesBox.classList.add("d-none");
+  backBtn.classList.replace("d-none", "d-flex");
+  pagesBox.classList.replace("d-flex", "d-none");
 
   addEventPokemons();
 }   
 
-
 function addEventPokemons(){
-  const pokemonsDivs = document.querySelectorAll(".pokemon") 
+  const pokemonsDivs = document.querySelectorAll(".pokemon") ;
   pokemonsDivs.forEach((pokemonDiv)=>{
-    pokemonDiv.addEventListener("click", loadPokemonPage)
+    pokemonDiv.addEventListener("click", loadPokemonPage);
   })
 }
 
 async function loadPokemonPage(e){
   const name = e.target.offsetParent.id;
   const url =  `https://pokeapi.co/api/v2/pokemon/${name}`;
-  
-  await fetch(url)
-  .then(res => res.json())
-  .then((pokemon)=>{
+  const pokemon = await fetchData(url);
+  const extraInfo = await fetchData("https://pokeapi.co/api/v2/version-group/1/");
+  let types = pokemon.types.reduce((acc, item) =>{
+    return acc + `<span class="d-block">${firstLetterUpper(item.type.name)}</h5>`
+  }, "")
+  let abilities = pokemon.abilities.reduce((acc, item)=>{
+    return acc + `<span class="d-block">${firstLetterUpper(item.ability.name)}</span>`
+  }, "")
 
-    infoPokeId.innerText = format(pokemon.id)
-    infoPokeName.innerText = firstLetterUpper(pokemon.name)
-    infoImage.setAttribute("src", pokemon.sprites.other['official-artwork']['front_default'])
+  infoPokeName.innerText = firstLetterUpper(pokemon.name);
+  infoPokeId.innerText = format(pokemon.id);
+  infoImage.setAttribute("src", pokemon.sprites.other['official-artwork']['front_default']);
+  info(1).innerText = Number(pokemon.height / 10).toFixed(1) + " m";
+  info(2).innerText = Number(pokemon.weight / 10).toFixed(1) + " kg";
+  info(3).innerText = firstLetterUpper(extraInfo.regions[0].name);
+  info(4).innerHTML = abilities;
+  info(5).innerHTML = types;
 
-    info(1).innerText = Number(pokemon.height / 10).toFixed(1) + " m";
-    info(2).innerText = Number(pokemon.weight / 10).toFixed(1) + " kg";
-
-
-    let abilities = pokemon.abilities.reduce((acc, item)=>{
-      return acc + `<span class="d-block">${firstLetterUpper(item.ability.name)}</span>`
-    }, "")
-    info(4).innerHTML = abilities;
-
-
-    let types = pokemon.types.reduce((acc, item) =>{
-      return acc + `<span class="d-block">${firstLetterUpper(item.type.name)}</h5>`
-    }, "")
-    info(5).innerHTML = types;
-
-   })
-  .catch(err =>{
-    alert(err)
-  })
-
-  await fetch("https://pokeapi.co/api/v2/version-group/1/")
-  .then(res => res.json())
-  .then(pokemon => {
-    info(3).innerText = firstLetterUpper(pokemon.regions[0].name)
-  })
-  .catch(err =>{
-    alert(err)
-  })
-
-  modalPokemon.classList.remove("d-none")
-  modalPokemon.classList.add("d-grid")
+  modalPokemon.classList.replace("d-none", "d-grid");
 }
