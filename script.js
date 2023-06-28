@@ -122,6 +122,7 @@ function changePage(e){
       pageNum.innerHTML = Number(pageNum.innerHTML) - 1;
     }
   } 
+  window.scrollTo(0, 0)
 }
 
 async function search(value){
