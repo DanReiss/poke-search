@@ -79,7 +79,7 @@ function loadPokemons(pokemons){
   const innerRows = pokemons.reduce((acc, pokemon, index) => {
     let row = 1;
     if((index + 1) % 4 === 1){
-            acc += `<div class="row row${row}">`
+            acc += `<div class="row row${row} w-100">`
     }
 
     acc += pokemonBox(pokemon);
