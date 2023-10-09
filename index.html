@@ -19,10 +19,16 @@
         <button id="search-button" class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
       </form>
     </div>
-    <div class="pokemons-container container p-4 text-center d-grid" style="justify-items: center;">
-            
+    <div id="loading" class="d-none justify-content-center m-5">
+      <div class="spinner-grow" role="status">
+        <span class="sr-only d-none">Loading...</span>
+      </div>
     </div>
+
     <main>
+      <div class="pokemons-container container p-4 text-center d-grid" style="justify-items: center;">
+           
+      </div>
       <div id="single-poke-modal" class="d-none">
         <div class="container d-flex flex-column align-items-center bg-light rounded p-3">
           <button class="close-page bg-light align-self-end p-1 border-0">

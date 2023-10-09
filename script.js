@@ -4,6 +4,7 @@ const pokeContainer = document.querySelector(".pokemons-container");
 const searchForm = document.querySelector("#search-form")
 const searchInput = document.querySelector("#search-input");
 const pagesBox = document.getElementById("pages");
+const loading = document.querySelector("#loading");
 
 const previous = document.getElementById("previous");
 const next = document.getElementById("next");
@@ -92,6 +93,8 @@ function loadPokemons(pokemons){
     return acc;
   }, "");
   
+  loading.classList.replace("d-none", "d-flex");
+  pokeContainer.classList.replace("d-grid", "d-none");
   backBtn.classList.replace("d-flex", "d-none");
   pagesBox.classList.replace("d-none", "d-flex");
   pokeContainer.innerHTML = innerRows;
@@ -148,6 +151,15 @@ async function search(value){
 
 function addEventPokemons(){
   const pokemonsDivs = document.querySelectorAll(".pokemon") ;
+  const pokemonsImgs = document.querySelectorAll(".pokemon img");
+  
+  pokemonsImgs[pokemonsImgs.length - 1].addEventListener("load", ()=>{
+    setTimeout(()=>{
+      loading.classList.replace("d-flex", "d-none");
+      pokeContainer.classList.replace("d-none", "d-grid");
+    }, 500)
+  })
+
   pokemonsDivs.forEach((pokemonDiv)=>{
     pokemonDiv.addEventListener("click", loadPokemonPage);
   })
