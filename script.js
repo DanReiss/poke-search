@@ -16,7 +16,7 @@ const closeButton = document.querySelector(".close-page")
 
 const infoPokeName = document.querySelector(".info-poke-name");
 const infoPokeId = document.querySelector(".info-id");
-const infoImage = document.querySelector(".info-img");
+const modalImage = document.querySelector(".info-img");
 let info = num => document.querySelector(`.info${num}`)
 let currentIDs = [1, 20];
 
@@ -43,6 +43,10 @@ searchForm.addEventListener("submit", (e)=>{
   if(!searchInput.value) return;
 
   search(searchInput.value)
+})
+
+modalImage.addEventListener('load', ()=>{
+  modalPokemon.classList.replace("d-none", "d-grid");
 })
 
 function closeModal(e, inCloseBtn){
@@ -134,11 +138,11 @@ async function search(value){
   const pokemonData = await fetchData(url);
     
   const innerRows = `
-  <div class="row row1">
+  <div class="row row1 w-100">
       ${pokemonBox(pokemonData)}
-        <div class="col m-2"></div>
-        <div class="col m-2"></div>
-        <div class="col m-2"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
   </div>`;
 
   pokeContainer.innerHTML = innerRows;
@@ -179,12 +183,11 @@ async function loadPokemonPage(e){
 
   infoPokeName.innerText = firstLetterUpper(pokemon.name);
   infoPokeId.innerText = format(pokemon.id);
-  infoImage.setAttribute("src", pokemon.sprites.other['official-artwork']['front_default']);
+  modalImage.setAttribute("src", pokemon.sprites.other['official-artwork']['front_default']);
   info(1).innerText = Number(pokemon.height / 10).toFixed(1) + " m";
   info(2).innerText = Number(pokemon.weight / 10).toFixed(1) + " kg";
   info(3).innerText = firstLetterUpper(extraInfo.regions[0].name);
   info(4).innerHTML = abilities;
   info(5).innerHTML = types;
 
-  modalPokemon.classList.replace("d-none", "d-grid");
 }
